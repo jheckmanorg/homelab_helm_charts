@@ -1,58 +1,27 @@
-name: Package and Publish Chart to GitHub Pages
+name: Release Charts
 
 on:
   push:
     branches:
       - main
-    paths:
-      - '**/*.tpl'
-      - 'Chart.yaml'
-      - 'values.yaml'
-      - '.github/workflows/publish-chart.yml'
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
+  release:
     permissions:
       contents: write
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Install Helm (Manual)
-        run: |
-          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-          chmod 700 get_helm.sh
-          ./get_helm.sh
-
-      - name: Package Chart
-        run: |
-          mkdir -p .cr-release-packages
-          PACKAGE_OUTPUT=$(helm package . -d .cr-release-packages)
-          PACKAGE_FILE=$(echo "$PACKAGE_OUTPUT" | grep -o '[^/]*\.tgz')
-          echo "Generated package file: $PACKAGE_FILE"
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
-          fetch-depth: 0  # Ensures full branch history
-
-      - name: Update Helm Repository
-        run: |
-          cp .cr-release-packages/*.tgz gh-pages/
-          cd gh-pages
-          if [ -f index.yaml ]; then
-            helm repo index --url https://jheckmanorg.github.io/${{ github.event.repository.name }} --merge index.yaml .
-          else
-            helm repo index --url https://jheckmanorg.github.io/${{ github.event.repository.name }} .
-          fi
-          git add .
-          git commit -m "Update Helm chart repository [skip ci]" || echo "No changes to commit"
-          git push origin gh-pages
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
