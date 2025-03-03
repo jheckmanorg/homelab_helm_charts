@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**/*.tpl'
+      - 'Chart.yaml'
+      - 'values.yaml'
+      - '.github/workflows/publish-chart.yml'
 
 jobs:
   release:
@@ -22,7 +27,8 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: "."  # Use the root directory as the chart directory
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          
