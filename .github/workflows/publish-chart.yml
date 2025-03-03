@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - '**/*.tpl'
-      - 'Chart.yaml'
-      - 'values.yaml'
+      - 'charts/**/*.tpl'
+      - 'charts/**/Chart.yaml'
+      - 'charts/**/values.yaml'
       - '.github/workflows/publish-chart.yml'
 
 jobs:
@@ -28,7 +28,5 @@ jobs:
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: "../"  # Use the root directory as the chart directory
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
