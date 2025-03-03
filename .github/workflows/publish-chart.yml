@@ -1,5 +1,4 @@
 name: Package and Publish Chart to GitHub Pages
-
 on:
   push:
     branches:
