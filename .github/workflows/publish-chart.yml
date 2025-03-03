@@ -1,4 +1,5 @@
 name: Package and Publish Chart to GitHub Pages
+
 on:
   push:
     branches:
@@ -23,20 +24,17 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Set up Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: 'latest'
+      - name: Install Helm (Manual)
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
 
       - name: Package Chart
         run: |
-          # Create a directory for the packaged charts
           mkdir -p .cr-release-packages
-          
-          # Package the chart
           PACKAGE_OUTPUT=$(helm package . -d .cr-release-packages)
           PACKAGE_FILE=$(echo "$PACKAGE_OUTPUT" | grep -o '[^/]*\.tgz')
-          
           echo "Generated package file: $PACKAGE_FILE"
 
       - name: Checkout gh-pages branch
@@ -44,24 +42,17 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages
-          fetch-depth: 0  # Ensures we get full branch history
+          fetch-depth: 0  # Ensures full branch history
 
       - name: Update Helm Repository
         run: |
-          # Copy packaged chart to gh-pages directory
           cp .cr-release-packages/*.tgz gh-pages/
-          
-          # Generate or update the index.yaml file
           cd gh-pages
           if [ -f index.yaml ]; then
             helm repo index --url https://jheckmanorg.github.io/${{ github.event.repository.name }} --merge index.yaml .
           else
             helm repo index --url https://jheckmanorg.github.io/${{ github.event.repository.name }} .
           fi
-          
-          # Commit and push changes
           git add .
-          git commit -m "Update Helm chart repository [skip ci]"
+          git commit -m "Update Helm chart repository [skip ci]" || echo "No changes to commit"
           git push origin gh-pages
-          
-          echo "Successfully published chart to GitHub Pages"
