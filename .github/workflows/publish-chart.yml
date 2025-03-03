@@ -1,0 +1,36 @@
+name: Package and Publish Chart
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.tpl'
+      - 'Chart.yaml'
+      - 'values.yaml'
+      - '.github/workflows/publish-chart.yml'
+
+jobs:
+  publish:
+    runs-on: arc-k8s-homelab
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Package and Push Chart
+        run: |
+          # Get the package file name from helm package output
+          PACKAGE_OUTPUT=$(helm package .)
+          PACKAGE_FILE=$(echo "$PACKAGE_OUTPUT" | grep -o '[^/]*\.tgz')
+          
+          echo "Generated package file: $PACKAGE_FILE"
+          
+          # Push the chart to ChartMuseum
+          curl --data-binary "@$PACKAGE_FILE" https://helmcharts.jonhomelab.com/api/charts
+          
+          echo "Successfully published $PACKAGE_FILE to ChartMuseum"
