@@ -12,7 +12,7 @@ To use this chart as a dependency in your Helm charts, add the following to your
 dependencies:
   - name: homelab-helm-charts
     version: 0.3.0
-    repository: https://jonheckman.github.io/homelab_helm_charts/
+    repository: https://jheckmanorg.github.io/homelab_helm_charts/
 ```
 
 Then run:
