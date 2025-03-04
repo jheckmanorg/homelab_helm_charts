@@ -38,3 +38,7 @@ kubectl create secret generic app-postgresql-auth \
 # Add the keep annotation to prevent Helm from deleting the secret
 kubectl annotate secret app-postgresql-auth "helm.sh/resource-policy=keep" --overwrite -n APPLICATIONNAMESPACE
 ```
+
+## License
+
+See [LICENSE](./LICENSE).
