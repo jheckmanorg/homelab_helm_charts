@@ -59,6 +59,10 @@ spec:
           args:
             {{- toYaml .Values.args | nindent 12 }}
           {{- end }}
+          {{- if .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- end }}
           env:
             {{- include "common.mergeEnv" . | nindent 12 }}
           resources:
@@ -66,5 +70,9 @@ spec:
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
       {{- end }}
 {{- end -}}
