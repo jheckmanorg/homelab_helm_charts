@@ -20,6 +20,10 @@ spec:
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if $.Values.podSecurityContext }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          {{- end }}
           containers:
           - name: {{ $job.name }}
             image: "{{ $job.image | default $.Values.image.repository }}:{{ $job.tag | default ($.Values.image.tag | default "latest") }}"
