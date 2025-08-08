@@ -40,6 +40,14 @@ spec:
             resources:
               {{- toYaml $job.resources | nindent 14 }}
             {{- end }}
+            {{- if $job.volumeMounts }}
+            volumeMounts:
+              {{- toYaml $job.volumeMounts | nindent 14 }}
+            {{- end }}
           restartPolicy: {{ $job.restartPolicy | default "OnFailure" }}
+          {{- if $.Values.volumes }}
+          volumes:
+            {{- toYaml $.Values.volumes | nindent 10 }}
+          {{- end }}
 {{- end }}
 {{- end -}}
