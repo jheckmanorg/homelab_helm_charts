@@ -3,6 +3,16 @@ entries:
   homelab-helm-charts:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-08-27T22:07:45.773549002Z"
+    description: Common Helm templates for my applications in my homelab
+    digest: 4a680dd4d844f5a4e377d50604d03724c2215f29f5585a65152dcec2a16c2184
+    name: homelab-helm-charts
+    type: library
+    urls:
+    - https://github.com/jheckmanorg/homelab_helm_charts/releases/download/homelab-helm-charts-0.7.3/homelab-helm-charts-0.7.3.tgz
+    version: 0.7.3
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-08-08T21:30:20.661802042Z"
     description: Common Helm templates for my applications in my homelab
     digest: a1b8944e672e44e0f047ea995ae7b0d7604dbe41718c16e6b98680a2acdf6394
@@ -71,4 +81,4 @@ entries:
     urls:
     - https://github.com/jheckmanorg/homelab_helm_charts/releases/download/homelab-helm-charts-0.3.0/homelab-helm-charts-0.3.0.tgz
     version: 0.3.0
-generated: "2025-08-08T21:30:20.661828443Z"
+generated: "2025-08-27T22:07:45.773576845Z"
