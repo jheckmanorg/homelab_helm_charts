@@ -2,5 +2,5 @@ apiVersion: v2
 name: homelab-helm-charts
 description: Common Helm templates for my applications in my homelab
 type: library
-version: 0.7.2
+version: 0.7.3
 appVersion: "1.0.0"

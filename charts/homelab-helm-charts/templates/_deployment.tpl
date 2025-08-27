@@ -35,6 +35,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       {{- end }}
+      {{- include "common.initcontainers" . | nindent 6 }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.containerSecurityContext }}
