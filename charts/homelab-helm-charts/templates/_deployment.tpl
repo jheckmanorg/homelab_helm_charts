@@ -35,6 +35,10 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       {{- end }}
+      {{- if .Values.hostAliases }}
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
+      {{- end }}
       {{- include "common.initcontainers" . | nindent 6 }}
       containers:
         - name: {{ .Chart.Name }}
